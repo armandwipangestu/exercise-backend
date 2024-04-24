@@ -14,4 +14,21 @@ const findUsers = async () => {
     return users;
 };
 
-export { findUsers };
+const findUserById = async (uid) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            uid,
+        },
+        include: {
+            Profile: {
+                select: {
+                    bio: true,
+                },
+            },
+        },
+    });
+
+    return user;
+};
+
+export { findUsers, findUserById };

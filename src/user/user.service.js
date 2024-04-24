@@ -1,4 +1,4 @@
-import { findUsers } from "./user.repository.js";
+import { findUserById, findUsers } from "./user.repository.js";
 
 const getAllUsers = async () => {
     const posts = await findUsers();
@@ -6,4 +6,14 @@ const getAllUsers = async () => {
     return posts;
 };
 
-export { getAllUsers };
+const getUserById = async (uid) => {
+    const user = await findUserById(uid);
+
+    if (!user) {
+        throw Error("User not found");
+    }
+
+    return user;
+};
+
+export { getAllUsers, getUserById };
