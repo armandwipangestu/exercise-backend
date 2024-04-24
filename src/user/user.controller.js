@@ -1,6 +1,7 @@
 import express from "express";
 import {
     createUser,
+    deleteUserById,
     editUserById,
     getAllUsers,
     getUserByEmail,
@@ -117,6 +118,23 @@ router.put("/users/:uid", async (req, res) => {
                 success: false,
             });
         }
+    }
+});
+
+router.delete("/users/:uid", async (req, res) => {
+    try {
+        const { uid } = req.params;
+        await deleteUserById(uid);
+
+        res.status(200).send({
+            message: "User Deleted",
+            success: true,
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: error.message,
+            success: false,
+        });
     }
 });
 

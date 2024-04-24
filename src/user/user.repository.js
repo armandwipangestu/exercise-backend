@@ -67,4 +67,21 @@ const editUser = async (uid, userData) => {
     return user;
 };
 
-export { findUsers, findUserById, findUserByEmail, insertUser, editUser };
+const deleteUser = async (uid) => {
+    const user = await prisma.user.delete({
+        where: {
+            uid,
+        },
+    });
+
+    return user;
+};
+
+export {
+    findUsers,
+    findUserById,
+    findUserByEmail,
+    insertUser,
+    editUser,
+    deleteUser,
+};

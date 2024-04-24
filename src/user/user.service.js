@@ -1,4 +1,5 @@
 import {
+    deleteUser,
     editUser,
     findUserByEmail,
     findUserById,
@@ -61,4 +62,16 @@ const editUserById = async (uid, userData) => {
     return user;
 };
 
-export { getAllUsers, getUserById, getUserByEmail, createUser, editUserById };
+const deleteUserById = async (uid) => {
+    await getUserById(uid);
+    await deleteUser(uid);
+};
+
+export {
+    getAllUsers,
+    getUserById,
+    getUserByEmail,
+    createUser,
+    editUserById,
+    deleteUserById,
+};
