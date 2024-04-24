@@ -1,4 +1,9 @@
-import { findUserById, findUsers } from "./user.repository.js";
+import {
+    findUserByEmail,
+    findUserById,
+    findUsers,
+    insertUser,
+} from "./user.repository.js";
 
 const getAllUsers = async () => {
     const posts = await findUsers();
@@ -16,4 +21,26 @@ const getUserById = async (uid) => {
     return user;
 };
 
-export { getAllUsers, getUserById };
+const getUserByEmail = async (email) => {
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+        throw Error("User not found");
+    }
+
+    return user;
+};
+
+const createUser = async (newUserData) => {
+    const findUser = await findUserByEmail(newUserData.email);
+
+    if (findUser) {
+        throw Error("Email has already taken");
+    }
+
+    const newUser = await insertUser(newUserData);
+
+    return newUser;
+};
+
+export { getAllUsers, getUserById, getUserByEmail, createUser };

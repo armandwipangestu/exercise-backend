@@ -31,4 +31,29 @@ const findUserById = async (uid) => {
     return user;
 };
 
-export { findUsers, findUserById };
+const findUserByEmail = async (email) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            email,
+        },
+        include: {
+            Profile: {
+                select: {
+                    bio: true,
+                },
+            },
+        },
+    });
+
+    return user;
+};
+
+const insertUser = async (userData) => {
+    const newUser = await prisma.user.create({
+        data: userData,
+    });
+
+    return newUser;
+};
+
+export { findUsers, findUserById, findUserByEmail, insertUser };

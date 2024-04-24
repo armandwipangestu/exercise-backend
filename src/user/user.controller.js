@@ -1,7 +1,19 @@
 import express from "express";
-import { getAllUsers, getUserById } from "./user.service.js";
+import {
+    createUser,
+    getAllUsers,
+    getUserByEmail,
+    getUserById,
+} from "./user.service.js";
+import { z, string, object, enum as enum_ } from "zod";
 
 const router = express.Router();
+
+const userSchema = object({
+    email: string().email(),
+    name: string().min(4, "Name must contain at least 4 character(s)"),
+    role: enum_(["USER", "ADMIN"]).optional(),
+});
 
 router.get("/users", async (req, res) => {
     try {
@@ -35,6 +47,40 @@ router.get("/users/:uid", async (req, res) => {
             message: error.message,
             success: false,
         });
+    }
+});
+
+router.post("/users", async (req, res) => {
+    try {
+        const validateData = userSchema.parse(req.body);
+        const newUserData = await createUser(validateData);
+
+        res.status(201).send({
+            data: newUserData,
+            message: "User created successfully",
+            success: true,
+        });
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            const errorMessage = error.errors.map((err) => {
+                return {
+                    field: err.path.join("."),
+                    message: err.message,
+                };
+            });
+
+            res.status(400).json({
+                message: "Validation error",
+                errors: errorMessage,
+                success: false,
+            });
+        } else {
+            console.log(error);
+            res.status(400).json({
+                message: error.message,
+                success: false,
+            });
+        }
     }
 });
 
