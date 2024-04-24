@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      Int      @id @default(autoincrement())
+  uid     String   @unique @default(uuid()) @map("_uid")
+  email   String   @unique
+  name    String
+  role    Role?    @default(USER)
+  Profile Profile?
+  Post    Post[]
+
+  @@map("users")
+}
+
+model Profile {
+  id  Int    @id @default(autoincrement())
+  uid String @unique @default(uuid()) @map("_uid")
+  bio String
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("profiles")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  uid       String   @unique @default(uuid()) @map("_uid")
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean  @default(false)
+
+  authorId Int
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  CategorysOnPost CategorysOnPost[]
+
+  @@map("posts")
+}
+
+model CategorysOnPost {
+  postId Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([postId, categoryId])
+  @@map("_CategorysOnPost")
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  uid  String @unique @default(uuid()) @map("_uid")
+  name String
+
+  CategorysOnPost CategorysOnPost[]
+
+  @@map("categorys")
+}
+
+enum Role {
+  USER
+  ADMIN
+}

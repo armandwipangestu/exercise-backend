@@ -1,0 +1,27 @@
+{
+    "name": "boilerplate-express-prisma",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "dev": "nodemon ./src/app.js",
+        "clean": "node prisma/clean.js",
+        "lint": "eslint ./src"
+    },
+    "prisma": {
+        "seed": "node prisma/seed.js"
+    },
+    "repository": "git@github.com:armandwipangestu/boilerplate-express-prisma",
+    "author": "armandwipangestu <armandwi.pangestu7@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "@faker-js/faker": "^8.4.1",
+        "nodemon": "^3.1.0",
+        "prisma": "^5.12.1"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.12.1",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2"
+    }
+}
