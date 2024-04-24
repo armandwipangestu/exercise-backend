@@ -1,4 +1,5 @@
 import {
+    editUser,
     findUserByEmail,
     findUserById,
     findUsers,
@@ -43,4 +44,21 @@ const createUser = async (newUserData) => {
     return newUser;
 };
 
-export { getAllUsers, getUserById, getUserByEmail, createUser };
+const editUserById = async (uid, userData) => {
+    const userToEdit = await getUserById(uid);
+
+    // Check if email want to edit is same with the user it self
+    if (userData.email && userData.email !== userToEdit.email) {
+        // Check if email want to edit is already use by another user
+        const existingUser = await findUserByEmail(userData.email);
+        if (existingUser && existingUser.uid !== uid) {
+            throw Error("Email has already been taken");
+        }
+    }
+
+    const user = await editUser(uid, userData);
+
+    return user;
+};
+
+export { getAllUsers, getUserById, getUserByEmail, createUser, editUserById };

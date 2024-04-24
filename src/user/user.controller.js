@@ -1,6 +1,7 @@
 import express from "express";
 import {
     createUser,
+    editUserById,
     getAllUsers,
     getUserByEmail,
     getUserById,
@@ -58,6 +59,41 @@ router.post("/users", async (req, res) => {
         res.status(201).send({
             data: newUserData,
             message: "User created successfully",
+            success: true,
+        });
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            const errorMessage = error.errors.map((err) => {
+                return {
+                    field: err.path.join("."),
+                    message: err.message,
+                };
+            });
+
+            res.status(400).json({
+                message: "Validation error",
+                errors: errorMessage,
+                success: false,
+            });
+        } else {
+            console.log(error);
+            res.status(400).json({
+                message: error.message,
+                success: false,
+            });
+        }
+    }
+});
+
+router.put("/users/:uid", async (req, res) => {
+    try {
+        const { uid } = req.params;
+        const validateData = userSchema.parse(req.body);
+        const userData = await editUserById(uid, validateData);
+
+        res.status(200).send({
+            data: userData,
+            message: "User edited",
             success: true,
         });
     } catch (error) {
