@@ -1,0 +1,141 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Exercise Backend",
+        "version": "1.0.0",
+        "description": "OpenAPI for Exercise Backend RESTful API",
+        "contact": {
+            "name": "Arman Dwi Pangestu",
+            "email": "armandwi.pangestu7@gmail.com",
+            "url": "https://armandwipangestu.vercel.app"
+        }
+    },
+    "servers": [
+        {
+            "description": "Exercise Backend RESTful API",
+            "url": "http://{environment}/api/v1",
+            "variables": {
+                "environment": {
+                    "description": "Server Information",
+                    "default": "localhost:5000",
+                    "enum": ["localhost:5000"]
+                }
+            }
+        }
+    ],
+    "tags": [
+        {
+            "name": "User",
+            "description": "Everything about users"
+        }
+    ],
+    "paths": {
+        "/users": {
+            "get": {
+                "tags": ["User"],
+                "summary": "Get All Users",
+                "description": "Get all users by default",
+                "parameters": [
+                    {
+                        "name": "role",
+                        "in": "query",
+                        "description": "Get all users by role in the result",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "nullable": true,
+                            "default": false
+                        },
+                        "examples": {
+                            "ADMIN": {
+                                "description": "Example role ADMIN",
+                                "value": "ADMIN"
+                            },
+                            "USER": {
+                                "description": "Example role USER",
+                                "value": "USER"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success get all users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "uid": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "role": {
+                                            "type": "string"
+                                        },
+                                        "profile": {
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "success": {
+                                        "description": "Example success get all users",
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": 1,
+                                                    "uid": "39da2ff6-24c1-48a0-8db1-425272a05468",
+                                                    "email": "Brayan_Bahringer39@gmail.com",
+                                                    "name": "Ray Altenwerth-Hyatt",
+                                                    "role": "ADMIN",
+                                                    "Profile": {
+                                                        "bio": "Casus repellendus calculus vilicus."
+                                                    }
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "uid": "3478492b-1dd1-40fd-b8ac-69e80118ee8f",
+                                                    "email": "Joany.Jacobson29@yahoo.com",
+                                                    "name": "Jasmine Schmitt",
+                                                    "role": "ADMIN",
+                                                    "Profile": {
+                                                        "bio": "Amissio solio iusto suadeo similique catena excepturi demum."
+                                                    }
+                                                }
+                                            ],
+                                            "message": "Get Users",
+                                            "success": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["User"]
+            }
+        },
+        "/users/{uid}": {
+            "post": {
+                "tags": ["User"]
+            },
+            "put": {
+                "tags": ["User"]
+            },
+            "delete": {
+                "tags": ["User"]
+            }
+        }
+    }
+}
