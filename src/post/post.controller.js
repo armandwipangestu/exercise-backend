@@ -3,7 +3,7 @@ import { getAllPosts } from "./post.service.js";
 
 const router = express.Router();
 
-router.get("/post", async (req, res) => {
+router.get("/posts", async (req, res) => {
     try {
         const posts = await getAllPosts();
         res.status(200).send({

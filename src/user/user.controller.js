@@ -3,7 +3,7 @@ import { getAllUsers } from "./user.service.js";
 
 const router = express.Router();
 
-router.get("/user", async (req, res) => {
+router.get("/users", async (req, res) => {
     try {
         const users = await getAllUsers();
         res.status(200).send({

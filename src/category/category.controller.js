@@ -3,7 +3,7 @@ import { getAllCategories } from "./category.service.js";
 
 const router = express.Router();
 
-router.get("/category", async (req, res) => {
+router.get("/categorys", async (req, res) => {
     try {
         const categories = await getAllCategories();
         res.status(200).send({
