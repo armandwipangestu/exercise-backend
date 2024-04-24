@@ -4,6 +4,7 @@ import {
     findUserByEmail,
     findUserById,
     findUsers,
+    findUsersByRole,
     insertUser,
 } from "./user.repository.js";
 
@@ -11,6 +12,12 @@ const getAllUsers = async () => {
     const posts = await findUsers();
 
     return posts;
+};
+
+const getAllUsersByRole = async (role) => {
+    const users = await findUsersByRole(role);
+
+    return users;
 };
 
 const getUserById = async (uid) => {
@@ -69,6 +76,7 @@ const deleteUserById = async (uid) => {
 
 export {
     getAllUsers,
+    getAllUsersByRole,
     getUserById,
     getUserByEmail,
     createUser,

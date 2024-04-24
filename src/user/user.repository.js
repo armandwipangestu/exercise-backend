@@ -14,6 +14,23 @@ const findUsers = async () => {
     return users;
 };
 
+const findUsersByRole = async (role) => {
+    const users = await prisma.user.findMany({
+        where: {
+            role,
+        },
+        include: {
+            Profile: {
+                select: {
+                    bio: true,
+                },
+            },
+        },
+    });
+
+    return users;
+};
+
 const findUserById = async (uid) => {
     const user = await prisma.user.findUnique({
         where: {
@@ -79,6 +96,7 @@ const deleteUser = async (uid) => {
 
 export {
     findUsers,
+    findUsersByRole,
     findUserById,
     findUserByEmail,
     insertUser,

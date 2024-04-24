@@ -4,6 +4,7 @@ import {
     deleteUserById,
     editUserById,
     getAllUsers,
+    getAllUsersByRole,
     getUserByEmail,
     getUserById,
 } from "./user.service.js";
@@ -19,10 +20,18 @@ const userSchema = object({
 
 router.get("/users", async (req, res) => {
     try {
-        const users = await getAllUsers();
+        const { role } = req.query;
+
+        let users;
+        if (role) {
+            users = await getAllUsersByRole(role);
+        } else {
+            users = await getAllUsers();
+        }
+
         res.status(200).send({
             data: users,
-            message: "Get Posts",
+            message: "Get Users",
             success: true,
         });
     } catch (error) {
