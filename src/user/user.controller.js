@@ -9,6 +9,7 @@ import {
     getUserById,
 } from "./user.service.js";
 import { z, string, object, enum as enum_ } from "zod";
+import { verifyToken } from "../middleware/VerifyToken.js";
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ const userSchema = object({
     role: enum_(["USER", "ADMIN"]).optional(),
 });
 
-router.get("/users", async (req, res) => {
+router.get("/users", verifyToken, async (req, res) => {
     try {
         const { role } = req.query;
 
