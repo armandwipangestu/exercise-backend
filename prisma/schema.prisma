@@ -14,13 +14,15 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  uid     String   @unique @default(uuid()) @map("_uid")
-  email   String   @unique
-  name    String
-  role    Role?    @default(USER)
-  Profile Profile?
-  Post    Post[]
+  id           Int      @id @default(autoincrement())
+  uid          String   @unique @default(uuid()) @map("_uid")
+  email        String   @unique
+  name         String
+  role         Role?    @default(USER)
+  password     String
+  refreshToken String?
+  Profile      Profile?
+  Post         Post[]
 
   @@map("users")
 }
