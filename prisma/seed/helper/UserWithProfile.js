@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import prisma from "../../../db/prisma.js";
+import bcrypt from "bcrypt";
 
 const createUserWithProfile = async (count) => {
     const usersWithProfiles = [];
@@ -9,11 +10,15 @@ const createUserWithProfile = async (count) => {
 
         try {
             // Membuat pengguna baru
+            const salt = await bcrypt.genSalt();
+            const hashPassword = await bcrypt.hash("12345", salt);
+
             const newUser = await prisma.user.create({
                 data: {
                     email: faker.internet.email(),
                     name: faker.person.fullName(),
                     role,
+                    password: hashPassword,
                 },
             });
 
