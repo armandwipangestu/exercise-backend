@@ -20,7 +20,7 @@ model User {
   name         String
   role         Role?    @default(USER)
   password     String
-  refreshToken String?
+  refreshToken String?  @db.VarChar(512)
   Profile      Profile?
   Post         Post[]
 
