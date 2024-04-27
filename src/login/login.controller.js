@@ -1,4 +1,3 @@
-import express from "express";
 import { getUserByEmail } from "../user/user.service.js";
 import { z, string, object } from "zod";
 import bcrypt from "bcrypt";
@@ -10,9 +9,7 @@ const userSchema = object({
     password: string(),
 });
 
-const router = express.Router();
-
-router.post("/login", async (req, res) => {
+export const loginHandler = async (req, res) => {
     try {
         const validateData = userSchema.parse(req.body);
 
@@ -87,6 +84,4 @@ router.post("/login", async (req, res) => {
             });
         }
     }
-});
-
-export default router;
+};

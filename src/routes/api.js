@@ -10,6 +10,7 @@ import {
 } from "../user/user.controller.js";
 import { getAllPostsHandler } from "../post/post.controller.js";
 import { getAllCategoriesHandler } from "../category/category.controller.js";
+import { loginHandler } from "../login/login.controller.js";
 
 const router = express.Router();
 
@@ -22,6 +23,8 @@ router.delete("/users/:uid", verifyToken, deleteUserByIdHandler);
 router.get("/posts", getAllPostsHandler);
 
 router.get("/categorys", getAllCategoriesHandler);
+
+router.post("/login", loginHandler);
 
 router.get(`/token`, refreshToken);
 

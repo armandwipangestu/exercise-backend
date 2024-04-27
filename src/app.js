@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import loginController from "./login/login.controller.js";
 import router from "./routes/api.js";
 
 const app = express();
@@ -19,7 +18,6 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
-app.use(`${process.env.API_VERSION}`, loginController);
 app.use(`${process.env.API_VERSION}`, router);
 
 app.listen(5000, () => {
