@@ -1,9 +1,6 @@
-import express from "express";
 import { getAllPosts } from "./post.service.js";
 
-const router = express.Router();
-
-router.get("/posts", async (req, res) => {
+export const getAllPostsHandler = async (req, res) => {
     try {
         const posts = await getAllPosts();
         res.status(200).send({
@@ -18,6 +15,4 @@ router.get("/posts", async (req, res) => {
             success: false,
         });
     }
-});
-
-export default router;
+};

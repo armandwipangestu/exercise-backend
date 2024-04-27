@@ -8,6 +8,7 @@ import {
     getAllUsersHandler,
     getUserByIdHandler,
 } from "../user/user.controller.js";
+import { getAllPostsHandler } from "../post/post.controller.js";
 
 const router = express.Router();
 
@@ -16,6 +17,8 @@ router.get("/users/:uid", verifyToken, getUserByIdHandler);
 router.post("/users", createUserHandler);
 router.put("/users/:uid", verifyToken, editUserByIdHandler);
 router.delete("/users/:uid", verifyToken, deleteUserByIdHandler);
+
+router.get("/posts", getAllPostsHandler);
 
 router.get(`/token`, refreshToken);
 
