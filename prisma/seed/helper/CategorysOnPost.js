@@ -14,18 +14,30 @@ const createCategorysOnPost = async (count) => {
         const randomCategory =
             allCategories[Math.floor(Math.random() * allCategories.length)];
 
-        const newCategorysOnPost = await prisma.categorysOnPost.create({
+        // Explicit Many-to-Many
+        // const newCategorysOnPost = await prisma.categorysOnPost.create({
+        //     data: {
+        //         post: {
+        //             connect: { id: randomPost.id },
+        //         },
+        //         category: {
+        //             connect: { id: randomCategory.id },
+        //         },
+        //     },
+        // });
+
+        // Implicit Many-to-Many
+        const updatedPost = await prisma.post.update({
+            where: { id: randomPost.id },
             data: {
-                post: {
-                    connect: { id: randomPost.id },
-                },
-                category: {
+                categorys: {
                     connect: { id: randomCategory.id },
                 },
             },
+            include: { categorys: true }, // Ini untuk memastikan bahwa kategori-kategori yang terkait juga diambil
         });
 
-        categorysOnPost.push(newCategorysOnPost);
+        categorysOnPost.push(updatedPost);
     }
 
     return categorysOnPost;
