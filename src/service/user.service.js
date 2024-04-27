@@ -7,7 +7,7 @@ import {
     findUsers,
     findUsersByRole,
     insertUser,
-} from "./user.repository.js";
+} from "../repository/user.repository.js";
 
 const getAllUsers = async () => {
     const posts = await findUsers();

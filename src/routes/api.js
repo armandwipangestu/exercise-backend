@@ -1,16 +1,16 @@
 import express from "express";
-import { refreshToken } from "../helper/RefreshToken.js";
-import { verifyToken } from "../middleware/VerifyToken.js";
+import { refreshTokenHandler } from "../controller/refreshtoken.controller.js";
+import { verifyToken } from "../middleware/verifyToken.middleware.js";
 import {
     createUserHandler,
     deleteUserByIdHandler,
     editUserByIdHandler,
     getAllUsersHandler,
     getUserByIdHandler,
-} from "../user/user.controller.js";
-import { getAllPostsHandler } from "../post/post.controller.js";
-import { getAllCategoriesHandler } from "../category/category.controller.js";
-import { loginHandler } from "../login/login.controller.js";
+} from "../controller/user.controller.js";
+import { getAllPostsHandler } from "../controller/post.controller.js";
+import { getAllCategoriesHandler } from "../controller/category.controller.js";
+import { loginHandler } from "../controller/login.controller.js";
 
 const router = express.Router();
 
@@ -26,6 +26,6 @@ router.get("/categorys", getAllCategoriesHandler);
 
 router.post("/login", loginHandler);
 
-router.get(`/token`, refreshToken);
+router.get(`/token`, refreshTokenHandler);
 
 export default router;

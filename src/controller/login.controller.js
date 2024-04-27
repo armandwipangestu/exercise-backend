@@ -1,8 +1,8 @@
-import { getUserByEmail } from "../user/user.service.js";
+import { getUserByEmail } from "../service/user.service.js";
 import { z, string, object } from "zod";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { updateRefreshTokenUser } from "../user/user.repository.js";
+import { updateRefreshTokenUser } from "../repository/user.repository.js";
 
 const userSchema = object({
     email: string().email(),

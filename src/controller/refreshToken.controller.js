@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import { getUserByRefreshToken } from "../user/user.service.js";
+import { getUserByRefreshToken } from "../service/user.service.js";
 
-export const refreshToken = async (req, res) => {
+export const refreshTokenHandler = async (req, res) => {
     try {
         const { refreshToken } = req.cookies;
 

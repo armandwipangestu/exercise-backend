@@ -1,11 +1,11 @@
-import { getAllPosts } from "./post.service.js";
+import { getAllCategories } from "../service/category.service.js";
 
-export const getAllPostsHandler = async (req, res) => {
+export const getAllCategoriesHandler = async (req, res) => {
     try {
-        const posts = await getAllPosts();
+        const categories = await getAllCategories();
         res.status(200).send({
-            data: posts,
-            message: "Get Posts",
+            data: categories,
+            message: "Get Categories",
             success: true,
         });
     } catch (error) {

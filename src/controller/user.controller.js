@@ -6,7 +6,7 @@ import {
     getAllUsersByRole,
     getUserByEmail,
     getUserById,
-} from "./user.service.js";
+} from "../service/user.service.js";
 import { z, string, object, enum as enum_ } from "zod";
 import bcrypt from "bcrypt";
 
