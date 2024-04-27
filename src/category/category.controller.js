@@ -1,9 +1,6 @@
-import express from "express";
 import { getAllCategories } from "./category.service.js";
 
-const router = express.Router();
-
-router.get("/categorys", async (req, res) => {
+export const getAllCategoriesHandler = async (req, res) => {
     try {
         const categories = await getAllCategories();
         res.status(200).send({
@@ -18,6 +15,4 @@ router.get("/categorys", async (req, res) => {
             success: false,
         });
     }
-});
-
-export default router;
+};
