@@ -7,6 +7,7 @@ import postController from "./post/post.controller.js";
 import userController from "./user/user.controller.js";
 import categoryController from "./category/category.controller.js";
 import loginController from "./login/login.controller.js";
+import router from "./routes.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(`${process.env.API_VERSION}`, postController);
 app.use(`${process.env.API_VERSION}`, userController);
 app.use(`${process.env.API_VERSION}`, categoryController);
 app.use(`${process.env.API_VERSION}`, loginController);
+app.use(`${process.env.API_VERSION}`, router);
 
 app.listen(5000, () => {
     console.log(`Server running on port http://localhost:5000`);

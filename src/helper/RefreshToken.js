@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { getUserByRefreshToken } from "../user/user.service";
+import { getUserByRefreshToken } from "../user/user.service.js";
 
 export const refreshToken = async (req, res) => {
     try {

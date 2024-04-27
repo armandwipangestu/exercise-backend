@@ -19,8 +19,8 @@ const userSchema = object({
     role: enum_(["USER", "ADMIN"]).optional(),
 });
 
-// router.get("/users", verifyToken, async (req, res) => {
-router.get("/users", async (req, res) => {
+router.get("/users", verifyToken, async (req, res) => {
+    // router.get("/users", async (req, res) => {
     try {
         const { role } = req.query;
 
