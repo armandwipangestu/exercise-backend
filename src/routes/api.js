@@ -1,13 +1,13 @@
 import express from "express";
-import { refreshToken } from "./helper/RefreshToken.js";
-import { verifyToken } from "./middleware/VerifyToken.js";
+import { refreshToken } from "../helper/RefreshToken.js";
+import { verifyToken } from "../middleware/VerifyToken.js";
 import {
     createUserHandler,
     deleteUserByIdHandler,
     editUserByIdHandler,
     getAllUsersHandler,
     getUserByIdHandler,
-} from "./user/user.controller.js";
+} from "../user/user.controller.js";
 
 const router = express.Router();
 

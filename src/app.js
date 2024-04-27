@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import postController from "./post/post.controller.js";
 import categoryController from "./category/category.controller.js";
 import loginController from "./login/login.controller.js";
-import router from "./routes.js";
+import router from "./routes/api.js";
 
 const app = express();
 
