@@ -1,5 +1,5 @@
 import express from "express";
-import { refreshTokenHandler } from "../controller/refreshtoken.controller.js";
+import { refreshTokenHandler } from "../controller/refreshToken.controller.js";
 import { verifyToken } from "../middleware/verifyToken.middleware.js";
 import {
     createUserHandler,
