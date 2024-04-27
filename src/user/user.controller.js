@@ -1,4 +1,3 @@
-import express from "express";
 import {
     createUser,
     deleteUserById,
@@ -9,18 +8,25 @@ import {
     getUserById,
 } from "./user.service.js";
 import { z, string, object, enum as enum_ } from "zod";
-import { verifyToken } from "../middleware/VerifyToken.js";
-
-const router = express.Router();
+import bcrypt from "bcrypt";
 
 const userSchema = object({
     email: string().email(),
     name: string().min(4, "Name must contain at least 4 character(s)"),
     role: enum_(["USER", "ADMIN"]).optional(),
+    password: string(),
 });
 
-router.get("/users", verifyToken, async (req, res) => {
-    // router.get("/users", async (req, res) => {
+const editUserSchema = object({
+    email: string().email().optional(),
+    name: string()
+        .min(4, "Name must contain at least 4 character(s)")
+        .optional(),
+    role: enum_(["USER", "ADMIN"]).optional(),
+    password: string().optional(),
+});
+
+export const getAllUsersHandler = async (req, res) => {
     try {
         const { role } = req.query;
 
@@ -43,9 +49,9 @@ router.get("/users", verifyToken, async (req, res) => {
             success: false,
         });
     }
-});
+};
 
-router.get("/users/:uid", async (req, res) => {
+export const getUserByIdHandler = async (req, res) => {
     try {
         const userUid = req.params.uid;
         const user = await getUserById(userUid);
@@ -61,11 +67,17 @@ router.get("/users/:uid", async (req, res) => {
             success: false,
         });
     }
-});
+};
 
-router.post("/users", async (req, res) => {
+export const createUserHandler = async (req, res) => {
     try {
         const validateData = userSchema.parse(req.body);
+
+        const salt = await bcrypt.genSalt();
+        const hashPassword = await bcrypt.hash(validateData.password, salt);
+
+        validateData.password = hashPassword;
+
         const newUserData = await createUser(validateData);
 
         res.status(201).send({
@@ -95,12 +107,20 @@ router.post("/users", async (req, res) => {
             });
         }
     }
-});
+};
 
-router.put("/users/:uid", async (req, res) => {
+export const editUserByIdHandler = async (req, res) => {
     try {
         const { uid } = req.params;
-        const validateData = userSchema.parse(req.body);
+        const validateData = editUserSchema.parse(req.body);
+
+        if (validateData.password) {
+            const salt = await bcrypt.genSalt();
+            const hashPassword = await bcrypt.hash(validateData.password, salt);
+
+            validateData.password = hashPassword;
+        }
+
         const userData = await editUserById(uid, validateData);
 
         res.status(200).send({
@@ -130,9 +150,9 @@ router.put("/users/:uid", async (req, res) => {
             });
         }
     }
-});
+};
 
-router.delete("/users/:uid", async (req, res) => {
+export const deleteUserByIdHandler = async (req, res) => {
     try {
         const { uid } = req.params;
         await deleteUserById(uid);
@@ -147,6 +167,4 @@ router.delete("/users/:uid", async (req, res) => {
             success: false,
         });
     }
-});
-
-export default router;
+};
