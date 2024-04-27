@@ -3,6 +3,7 @@ import {
     editUser,
     findUserByEmail,
     findUserById,
+    findUserByRefreshToken,
     findUsers,
     findUsersByRole,
     insertUser,
@@ -32,6 +33,16 @@ const getUserById = async (uid) => {
 
 const getUserByEmail = async (email) => {
     const user = await findUserByEmail(email);
+
+    if (!user) {
+        throw Error("User not found");
+    }
+
+    return user;
+};
+
+const getUserByRefreshToken = async (refreshToken) => {
+    const user = await findUserByRefreshToken(refreshToken);
 
     if (!user) {
         throw Error("User not found");
@@ -79,6 +90,7 @@ export {
     getAllUsersByRole,
     getUserById,
     getUserByEmail,
+    getUserByRefreshToken,
     createUser,
     editUserById,
     deleteUserById,
