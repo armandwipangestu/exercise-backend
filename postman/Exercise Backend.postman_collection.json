@@ -1,0 +1,771 @@
+{
+	"info": {
+		"_postman_id": "2ee3aa21-2840-4cdb-af57-05352d73074d",
+		"name": "Exercise Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22843638"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Add / Create / SignUp User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code should be 201', () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test('response header Content-Type should be application/json', () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');\r",
+									"});\r",
+									"\r",
+									"pm.test('response body should be an object', () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test('response body should have correct property and value', () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseJson).to.haveOwnProperty('status');\r",
+									"    pm.expect(responseJson.status).to.equals('success');\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('message');\r",
+									"    pm.expect(responseJson.message).to.equals('User created successfully');\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('data');\r",
+									"    pm.expect(responseJson.data).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test('response body data should contain userId', () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const { data } = responseJson;\r",
+									"\r",
+									"    pm.expect(data).to.haveOwnProperty('userId');\r",
+									"    pm.expect(data.userId).to.not.equals('');\r",
+									"\r",
+									"    pm.environment.set('userId', data.userId);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{newEmail}}\",\r\n    \"name\": \"{{newName}}\",\r\n    \"role\": \"{{newRole}}\",\r\n    \"password\": \"{{newPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('response status code should have 200 values', () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('response Content-Type header should have application/json value', () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8')\r",
+									"})\r",
+									"\r",
+									"pm.test('response body should an object', () => {\r",
+									"    const responseJson = pm.response.json()\r",
+									"    pm.expect(responseJson).to.be.an('object')\r",
+									"})\r",
+									"\r",
+									"pm.test('response body object should contain correct property and value', () => {\r",
+									"    const responseJson = pm.response.json()\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('status')\r",
+									"    pm.expect(responseJson.status).to.equals(\"success\")\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('message')\r",
+									"    pm.expect(responseJson.message).to.equals('Get All Users')\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('data')\r",
+									"    pm.expect(responseJson.data).to.be.an(\"object\")\r",
+									"})\r",
+									"\r",
+									"pm.test(\"response body data object should have a array users and contains 10 items\", () => {\r",
+									"    const responseJson = pm.response.json()\r",
+									"    const { data } = responseJson\r",
+									"\r",
+									"    pm.expect(data).to.haveOwnProperty(\"users\")\r",
+									"    pm.expect(data.users).to.be.an('array');\r",
+									"    pm.expect(data.users).to.lengthOf(11);\r",
+									"})\r",
+									"\r",
+									"pm.test('the users should have contains only uid, email, and name property', () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const { data: { users } } = responseJson;\r",
+									"\r",
+									"    users.forEach((user, index) => {\r",
+									"        pm.expect(Object.keys(user)).to.lengthOf(3);\r",
+									"        pm.expect(user).to.haveOwnProperty('uid');\r",
+									"        pm.expect(user).to.haveOwnProperty('email');\r",
+									"        pm.expect(user).to.haveOwnProperty('name');\r",
+									"\r",
+									"        // pm.test(`the user ${index+1} Profile data object should have a bio property`, () => {\r",
+									"        //     const { Profile } = user\r",
+									"        //     pm.expect(Object.keys(Profile)).to.lengthOf(1)\r",
+									"        //     pm.expect(Profile).to.haveOwnProperty('bio')\r",
+									"        // })\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// =============================================== OLD TEST =============================================================\r",
+									"\r",
+									"// function runTests() {\r",
+									"//     pm.test('response status code should have 200 values', () => {\r",
+									"//         pm.response.to.have.status(200)\r",
+									"//     })\r",
+									"\r",
+									"//     pm.test('response Content-Type header should have application/json value', () => {\r",
+									"//         pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8')\r",
+									"//     })\r",
+									"\r",
+									"//     pm.test('response body should be an object', () => {\r",
+									"//         const responseJson = pm.response.json()\r",
+									"//         pm.expect(responseJson).to.be.an('object')\r",
+									"//     })\r",
+									"\r",
+									"//     pm.test('response body should have the correct property and value', () => {\r",
+									"//         const responseJson = pm.response.json()\r",
+									"\r",
+									"//         pm.expect(responseJson).to.ownProperty('message')\r",
+									"//         pm.expect(responseJson.message).to.equals('Get Users')\r",
+									"\r",
+									"//         pm.expect(responseJson).to.ownProperty('success')\r",
+									"//         pm.expect(responseJson.success).to.equals(true)\r",
+									"\r",
+									"//         pm.expect(responseJson).to.ownProperty('data')\r",
+									"//         pm.expect(responseJson.data).to.be.an('array')\r",
+									"//         pm.expect(responseJson.data).lengthOf.at.least(1)\r",
+									"//     })\r",
+									"// }\r",
+									"\r",
+									"// async function refreshAccessTokenAndRunTests() {\r",
+									"//     const response = await new Promise((resolve, reject) => {\r",
+									"//         pm.sendRequest(`http://localhost:5000/api/v1/token`, (error, response) => {\r",
+									"//             if (error) reject(error);\r",
+									"//             else resolve(response);\r",
+									"//         });\r",
+									"//     });\r",
+									"\r",
+									"//     console.log(response.json())\r",
+									"\r",
+									"//     const responseJson = response.json();\r",
+									"//     pm.environment.set('accessToken', responseJson.accessToken);\r",
+									"\r",
+									"//     const tokenParts = responseJson.accessToken.split('.');\r",
+									"//     const encodedPayload = tokenParts[1];\r",
+									"//     const decodedPayload = Buffer.from(encodedPayload, 'base64').toString('utf-8');\r",
+									"//     const payload = JSON.parse(decodedPayload);\r",
+									"//     pm.environment.set('expiredAccessToken', payload.exp);\r",
+									"\r",
+									"//     // Set Authorization header for all subsequent requests\r",
+									"//     pm.request.headers.upsert({key: 'Authorization', value: `Bearer ${responseJson.accessToken}`});\r",
+									"\r",
+									"//     // Run tests with the new access token\r",
+									"//     runTests();\r",
+									"// }\r",
+									"\r",
+									"// const expiredAccessToken = pm.environment.get('expiredAccessToken')\r",
+									"// const currentTime = new Date().getTime()\r",
+									"// const elapse = expiredAccessToken * 1000 < currentTime\r",
+									"\r",
+									"// runTests()\r",
+									"\r",
+									"// if (elapse) {\r",
+									"//     refreshAccessTokenAndRunTests()\r",
+									"// } else {\r",
+									"//     runTests()\r",
+									"// }\r",
+									"\r",
+									"// function refreshAccessTokenAndRunTests() {\r",
+									"//     pm.sendRequest(`http://localhost:5000/api/v1/token`, (error, response) => {\r",
+									"//         if (!error) {\r",
+									"//             pm.test('token expired, send request to refresh the token', () => {\r",
+									"//                 const responseJson = response.json()\r",
+									"\r",
+									"//                 pm.expect(responseJson).to.ownProperty('accessToken')\r",
+									"//                 pm.expect(responseJson.accessToken).to.be.an('string')\r",
+									"\r",
+									"//                 pm.environment.set('accessToken', responseJson.accessToken)\r",
+									"\r",
+									"//                 const tokenParts = responseJson.accessToken.split('.')\r",
+									"//                 const encodedPayload = tokenParts[1]\r",
+									"//                 const decodedPayload = Buffer.from(encodedPayload, 'base64').toString('utf-8')\r",
+									"//                 const payload = JSON.parse(decodedPayload)\r",
+									"//                 pm.environment.set('expiredAccessToken', payload.exp)\r",
+									"\r",
+									"//                 // Set Authorization header for all subsequent requests\r",
+									"//                 pm.request.headers.upsert({key: 'Authorization', value: `Bearer ${responseJson.accessToken}`})\r",
+									"\r",
+									"//                 runTests()\r",
+									"//             })\r",
+									"//         }\r",
+									"//     })\r",
+									"// }\r",
+									"\r",
+									"// function runTests() {\r",
+									"//     pm.test('response status code should have 200 values', () => {\r",
+									"//         pm.response.to.have.status(200)\r",
+									"//     })\r",
+									"\r",
+									"//     pm.test('response Content-Type header should have application/json value', () => {\r",
+									"//         pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8')\r",
+									"//     })\r",
+									"\r",
+									"//     pm.test('response body should be an object', () => {\r",
+									"//         const responseJson = pm.response.json()\r",
+									"//         pm.expect(responseJson).to.be.an('object')\r",
+									"//     })\r",
+									"\r",
+									"//     pm.test('response body should have the correct property and value', () => {\r",
+									"//         const responseJson = pm.response.json()\r",
+									"\r",
+									"//         pm.expect(responseJson).to.ownProperty('message')\r",
+									"//         pm.expect(responseJson.message).to.equals('Get Users')\r",
+									"\r",
+									"//         pm.expect(responseJson).to.ownProperty('success')\r",
+									"//         pm.expect(responseJson.success).to.equals(true)\r",
+									"\r",
+									"//         pm.expect(responseJson).to.ownProperty('data')\r",
+									"//         pm.expect(responseJson.data).to.be.an('array')\r",
+									"//         pm.expect(responseJson.data).lengthOf.at.least(1)\r",
+									"//     })\r",
+									"// }"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detail Users With Correct Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('response code should be 200', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('response header Content-Type should be application/json', () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');\r",
+									"});\r",
+									"\r",
+									"pm.test('response body should an object', () =>  {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test('response body object should contain correct property and value', () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseJson).to.haveOwnProperty('status');\r",
+									"    pm.expect(responseJson.status).to.equals('success');\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('message');\r",
+									"    pm.expect(responseJson.message).to.equals('Get User by UID');\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('data');\r",
+									"    pm.expect(responseJson.data).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test('response body data object should contain user object', () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const { data } = responseJson;\r",
+									"\r",
+									"    pm.expect(data).to.haveOwnProperty('user');\r",
+									"    pm.expect(data.user).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test('user object should contain correct property and value', () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const { data: { user } } = responseJson;\r",
+									"\r",
+									"    pm.expect(user).to.haveOwnProperty('uid');\r",
+									"    pm.expect(user.uid).to.equals(pm.environment.get('userId'));\r",
+									"\r",
+									"    pm.expect(user).to.haveOwnProperty('email');\r",
+									"    pm.expect(user.email).to.equals(pm.environment.get('newEmail'));\r",
+									"\r",
+									"    pm.expect(user).to.haveOwnProperty('name');\r",
+									"    pm.expect(user.name).to.equals(pm.environment.get('newName'));\r",
+									"\r",
+									"    pm.expect(user).to.haveOwnProperty('role');\r",
+									"    pm.expect(user.role).to.equals(pm.environment.get('newRole'));\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/users/{{userId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User With Correct Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code should be 200', () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('response header Content-Type should be application/json', () => {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');",
+									"});",
+									"",
+									"pm.test('response body should be an object', () => {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson).to.be.an('object');",
+									"});",
+									"",
+									"pm.test('response body should have correct property and value', () => {",
+									"    const responseJson = pm.response.json();",
+									"    ",
+									"    pm.expect(responseJson).to.haveOwnProperty('status');",
+									"    pm.expect(responseJson.status).to.equals('success');",
+									"",
+									"    pm.expect(responseJson).to.haveOwnProperty('message');",
+									"    pm.expect(responseJson.message).to.equals('User edited successfully');",
+									"",
+									"    pm.expect(responseJson).to.haveOwnProperty('data');",
+									"    pm.expect(responseJson.data).to.be.an('object');",
+									"",
+									"    pm.expect(responseJson.data).to.haveOwnProperty('userId')",
+									"    pm.expect(responseJson.data.userId).to.equals(pm.environment.get('userId'))",
+									"});",
+									"",
+									"pm.test('when get detail users', () => {",
+									"    pm.sendRequest({",
+									"        url: `http://localhost:5000/api/v1/users/${pm.environment.get('userId')}`,",
+									"        method: \"GET\",",
+									"        // headers: {",
+									"        //     \"authorization\": `Bearer ${pm.environment.get(\"accessToken\")}`,",
+									"        //     \"Content-Type\": \"application/json\"",
+									"        // }",
+									"        auth: {",
+									"            type: \"bearer\",",
+									"            bearer: [",
+									"                {",
+									"                    key: \"token\",",
+									"                    value: `${pm.environment.get('accessToken')}`,",
+									"                    type: \"string\"",
+									"                }",
+									"            ]",
+									"        },",
+									"        headers: {",
+									"            \"Content-Type\": \"application/json\"",
+									"        }",
+									"    }, function (error, response) {",
+									"        const responseJson = response.json();",
+									"        const { data: { user } } = responseJson;",
+									"",
+									"        pm.test('user object should contain updated values', () => {",
+									"            pm.expect(user).to.haveOwnProperty('uid');",
+									"            pm.expect(user.uid).to.equals(pm.environment.get('userId'));",
+									"",
+									"            pm.expect(user).to.haveOwnProperty('email');",
+									"            pm.expect(user.email).to.equals(pm.environment.get('updateEmail'));",
+									"",
+									"            pm.expect(user).to.haveOwnProperty('name');",
+									"            pm.expect(user.name).to.equals(pm.environment.get('updateName'));",
+									"",
+									"            pm.expect(user).to.haveOwnProperty('role');",
+									"            pm.expect(user.role).to.equals(pm.environment.get('updateRole'));",
+									"        });",
+									"    })",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{updateEmail}}\",\r\n    \"name\": \"{{updateName}}\",\r\n    \"role\": \"{{updateRole}}\",\r\n    \"password\": \"{{updatePassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/users/{{userId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User With Correct Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code should be 200', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('response header Content-Type should be application/json', () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8');\r",
+									"});\r",
+									"\r",
+									"pm.test('response body should be an object', () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test('response body should have correct property and value', () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseJson).to.haveOwnProperty('status');\r",
+									"    pm.expect(responseJson.status).to.equals('success');\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('message');\r",
+									"    pm.expect(responseJson.message).to.equals('User deleted');\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('data');\r",
+									"    pm.expect(responseJson.data).to.be.an('object');\r",
+									"\r",
+									"    pm.expect(responseJson.data).to.haveOwnProperty('userId')\r",
+									"    pm.expect(responseJson.data.userId).to.equals(pm.environment.get('userId'))\r",
+									"});\r",
+									"\r",
+									"pm.test('when get detail users', () => {\r",
+									"    pm.sendRequest({\r",
+									"        url: `http://localhost:5000/api/v1/users/${pm.environment.get('userId')}`,\r",
+									"        method: \"GET\",\r",
+									"        auth: {\r",
+									"            type: \"bearer\",\r",
+									"            bearer: [\r",
+									"                {\r",
+									"                    key: \"token\",\r",
+									"                    value: `${pm.environment.get('accessToken')}`,\r",
+									"                    type: \"string\"\r",
+									"                }\r",
+									"            ]\r",
+									"        },\r",
+									"        headers: {\r",
+									"            \"Content-Type\": \"application/json\"\r",
+									"        }\r",
+									"    }, function (error, response) {\r",
+									"        pm.test('The user should be not found', () => {\r",
+									"          pm.expect(response.code).to.equals(404);\r",
+									"       }); \r",
+									"    })\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/users/{{userId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Testing Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('response status code should have 200 values', () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('response Content-Type header should have application/json value', () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8')\r",
+									"})\r",
+									"\r",
+									"pm.test('response body should an object', () => {\r",
+									"    const responseJson = pm.response.json()\r",
+									"    pm.expect(responseJson).to.be.an('object')\r",
+									"})\r",
+									"\r",
+									"pm.test('response body object should contain correct property and value', () => {\r",
+									"    const responseJson = pm.response.json()\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('status')\r",
+									"    pm.expect(responseJson.status).to.equals(\"success\")\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('message')\r",
+									"    pm.expect(responseJson.message).to.equals('Login successfully')\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('data')\r",
+									"    pm.expect(responseJson.data).to.be.an(\"object\")\r",
+									"})\r",
+									"\r",
+									"pm.test(\"response body data object should contain `accessToken` string\", () => {\r",
+									"    const responseJson = pm.response.json()\r",
+									"    const { data } = responseJson\r",
+									"\r",
+									"    pm.expect(data).to.haveOwnProperty(\"accessToken\")\r",
+									"    pm.expect(data.accessToken).to.be.an('string')\r",
+									"\r",
+									"    pm.environment.set('accessToken', data.accessToken)\r",
+									"    \r",
+									"    const tokenParts = data.accessToken.split('.')\r",
+									"    const encodedPayload = tokenParts[1]\r",
+									"    const decodedPayload = Buffer.from(encodedPayload, 'base64').toString('utf-8')\r",
+									"    const payload = JSON.parse(decodedPayload)\r",
+									"    pm.environment.set('expiredAccessToken', payload.exp)\r",
+									"    \r",
+									"    pm.environment.set('refreshToken', pm.cookies.get('refreshToken'))\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{newEmail}}\",\r\n    \"password\": \"{{newPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "JWT",
+			"item": [
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('response status code should have 200 values', () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('response Content-Type header should have application/json value', () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.equals('application/json; charset=utf-8')\r",
+									"})\r",
+									"\r",
+									"pm.test('response body should an object', () => {\r",
+									"    const responseJson = pm.response.json()\r",
+									"    pm.expect(responseJson).to.be.an('object')\r",
+									"})\r",
+									"\r",
+									"pm.test('response body object should contain correct property and value', () => {\r",
+									"    const responseJson = pm.response.json()\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('status')\r",
+									"    pm.expect(responseJson.status).to.equals(\"success\")\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('message')\r",
+									"    pm.expect(responseJson.message).to.equals('Refresh Token successfully')\r",
+									"\r",
+									"    pm.expect(responseJson).to.haveOwnProperty('data')\r",
+									"    pm.expect(responseJson.data).to.be.an(\"object\")\r",
+									"})\r",
+									"\r",
+									"pm.test(\"response body data object should contain `accessToken` string\", () => {\r",
+									"    const responseJson = pm.response.json()\r",
+									"    const { data } = responseJson\r",
+									"\r",
+									"    pm.expect(data).to.haveOwnProperty(\"accessToken\")\r",
+									"    pm.expect(data.accessToken).to.be.an('string')\r",
+									"\r",
+									"    pm.environment.set('accessToken', data.accessToken)\r",
+									"    \r",
+									"    const tokenParts = data.accessToken.split('.')\r",
+									"    const encodedPayload = tokenParts[1]\r",
+									"    const decodedPayload = Buffer.from(encodedPayload, 'base64').toString('utf-8')\r",
+									"    const payload = JSON.parse(decodedPayload)\r",
+									"    pm.environment.set('expiredAccessToken', payload.exp)\r",
+									"    \r",
+									"    pm.environment.set('refreshToken', pm.cookies.get('refreshToken'))\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

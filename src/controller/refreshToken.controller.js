@@ -6,7 +6,11 @@ export const refreshTokenHandler = async (req, res) => {
         const { refreshToken } = req.cookies;
 
         if (!refreshToken) {
-            return res.sendStatus(401);
+            return res.status(401).json({
+                status: "fail",
+                message:
+                    "Unauthorized. Please provide `refreshToken` on cookies before request",
+            });
         }
 
         const user = await getUserByRefreshToken(refreshToken);
@@ -16,7 +20,11 @@ export const refreshTokenHandler = async (req, res) => {
             process.env.JWT_REFRESH_TOKEN_SECRET,
             (err, decoded) => {
                 if (err) {
-                    return res.sendStatus(403);
+                    return res.status(403).json({
+                        status: "fail",
+                        message:
+                            "Forbidden. Can't find who the owner `refreshToken`",
+                    });
                 }
 
                 const { id, name, email } = user;
@@ -33,10 +41,20 @@ export const refreshTokenHandler = async (req, res) => {
                     }
                 );
 
-                res.json({ accessToken });
+                res.status(200).send({
+                    status: "success",
+                    message: "Refresh Token successfully",
+                    data: {
+                        accessToken,
+                    },
+                });
             }
         );
     } catch (error) {
         console.log(error);
+        res.status(500).send({
+            status: "fail",
+            message: error.message,
+        });
     }
 };

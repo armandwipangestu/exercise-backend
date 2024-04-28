@@ -38,15 +38,17 @@ export const getAllUsersHandler = async (req, res) => {
         }
 
         res.status(200).send({
-            data: users,
-            message: "Get Users",
-            success: true,
+            status: "success",
+            message: "Get All Users",
+            data: {
+                users: users,
+            },
         });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({
+            status: "fail",
             message: error.message,
-            success: false,
         });
     }
 };
@@ -57,19 +59,23 @@ export const getUserByIdHandler = async (req, res) => {
         const user = await getUserById(userUid);
 
         res.status(200).send({
-            data: user,
+            status: "success",
             message: "Get User by UID",
-            success: true,
+            data: {
+                user: user,
+            },
         });
     } catch (error) {
-        res.status(400).json({
+        console.log(error.message);
+        res.status(404).json({
+            status: "fail",
             message: error.message,
-            success: false,
         });
     }
 };
 
 export const createUserHandler = async (req, res) => {
+    console.log(req);
     try {
         const validateData = userSchema.parse(req.body);
 
@@ -81,9 +87,11 @@ export const createUserHandler = async (req, res) => {
         const newUserData = await createUser(validateData);
 
         res.status(201).send({
-            data: newUserData,
+            status: "success",
             message: "User created successfully",
-            success: true,
+            data: {
+                userId: newUserData.uid,
+            },
         });
     } catch (error) {
         if (error instanceof z.ZodError) {
@@ -94,16 +102,17 @@ export const createUserHandler = async (req, res) => {
                 };
             });
 
+            console.log(errorMessage);
             res.status(400).json({
+                status: "fail",
                 message: "Validation error",
                 errors: errorMessage,
-                success: false,
             });
         } else {
             console.log(error);
             res.status(400).json({
+                status: "fail",
                 message: error.message,
-                success: false,
             });
         }
     }
@@ -124,9 +133,11 @@ export const editUserByIdHandler = async (req, res) => {
         const userData = await editUserById(uid, validateData);
 
         res.status(200).send({
-            data: userData,
-            message: "User edited",
-            success: true,
+            status: "success",
+            message: "User edited successfully",
+            data: {
+                userId: userData.uid,
+            },
         });
     } catch (error) {
         if (error instanceof z.ZodError) {
@@ -137,16 +148,17 @@ export const editUserByIdHandler = async (req, res) => {
                 };
             });
 
+            console.log(errorMessage);
             res.status(400).json({
+                status: "fail",
                 message: "Validation error",
                 errors: errorMessage,
-                success: false,
             });
         } else {
             console.log(error);
             res.status(400).json({
+                status: "fail",
                 message: error.message,
-                success: false,
             });
         }
     }
@@ -158,13 +170,16 @@ export const deleteUserByIdHandler = async (req, res) => {
         await deleteUserById(uid);
 
         res.status(200).send({
-            message: "User Deleted",
-            success: true,
+            status: "success",
+            message: "User deleted",
+            data: {
+                userId: uid,
+            },
         });
     } catch (error) {
         res.status(400).json({
+            status: "fail",
             message: error.message,
-            success: false,
         });
     }
 };

@@ -2,12 +2,10 @@ import prisma from "../../db/prisma.js";
 
 const findUsers = async () => {
     const users = await prisma.user.findMany({
-        include: {
-            Profile: {
-                select: {
-                    bio: true,
-                },
-            },
+        select: {
+            uid: true,
+            email: true,
+            name: true,
         },
     });
 
@@ -36,7 +34,11 @@ const findUserById = async (uid) => {
         where: {
             uid,
         },
-        include: {
+        select: {
+            uid: true,
+            email: true,
+            name: true,
+            role: true,
             Profile: {
                 select: {
                     bio: true,

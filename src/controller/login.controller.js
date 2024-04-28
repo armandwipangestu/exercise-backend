@@ -22,8 +22,8 @@ export const loginHandler = async (req, res) => {
 
         if (!match) {
             return res.status(400).json({
+                status: "fail",
                 message: "Wrong password",
-                success: false,
             });
         }
 
@@ -61,7 +61,13 @@ export const loginHandler = async (req, res) => {
             // secure: true // this is for HTTPS
         });
 
-        res.json({ accessToken });
+        res.status(200).send({
+            status: "success",
+            message: "Login successfully",
+            data: {
+                accessToken,
+            },
+        });
     } catch (error) {
         if (error instanceof z.ZodError) {
             const errorMessage = error.errors.map((err) => {
@@ -71,16 +77,17 @@ export const loginHandler = async (req, res) => {
                 };
             });
 
+            console.log(errorMessage);
             res.status(400).json({
+                status: "fail",
                 message: "Validation error",
                 errors: errorMessage,
-                success: false,
             });
         } else {
             console.log(error);
             res.status(404).json({
+                status: "fail",
                 message: error.message,
-                success: false,
             });
         }
     }
