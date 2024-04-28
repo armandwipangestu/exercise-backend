@@ -6,7 +6,8 @@
     "scripts": {
         "dev": "nodemon ./src/app.js",
         "clean": "node prisma/clean.js",
-        "lint": "eslint ./src"
+        "lint": "eslint ./src",
+        "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js"
     },
     "prisma": {
         "seed": "node prisma/seed.js"
@@ -16,8 +17,10 @@
     "license": "MIT",
     "devDependencies": {
         "@faker-js/faker": "^8.4.1",
+        "jest": "^29.7.0",
         "nodemon": "^3.1.0",
-        "prisma": "^5.12.1"
+        "prisma": "^5.12.1",
+        "supertest": "^7.0.0"
     },
     "dependencies": {
         "@prisma/client": "^5.12.1",

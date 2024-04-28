@@ -23,3 +23,5 @@ app.use(`${process.env.API_VERSION}`, router);
 app.listen(5000, () => {
     console.log(`Server running on port http://localhost:5000`);
 });
+
+export default app;
