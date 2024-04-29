@@ -15,7 +15,7 @@
 ## Tech Stack
 
 -   [Express.js](https://expressjs.com) (`Framework`): Minimal and flexible Node.js web application framework that provides robust set of features for web and mobile applications. APIs.
--   [Prisma](https://www.prisma.io) (`ORM`): Let your team ship features faster, and leave the database complexities to us (orm, schema, intropection, migration, seeding, studio).
+-   [Prisma](https://www.prisma.io) (`ORM`): Let your team ship features faster, and leave the database complexities to us (orm, schema, introspection, migration, seeding, studio).
 -   [MySQL](https://www.mysql.com) (`Database`): Is an open-source relational database management system.
 -   [PostgreSQL](https://www.postgresql.org) (`Database`): PostgreSQL, also known as Postgres, is a free and open-source relational database management system emphasizing extensibility and SQL compliance.
 -   [Zod](https://zod.dev) (`Validation`): Zod is a TypeScript-first schema declaration and validation library. I'm using the term "schema" to broadly refer to any data type, from a simple `string` to a complex nested object. Zod is designed to be as developer-friendly as possible. The goal is to eliminate duplicative type declarations. With Zod, you declare a validator once and Zod will automatically infer the static TypeScript type. It's easy to compose simpler types into complex data structures.
